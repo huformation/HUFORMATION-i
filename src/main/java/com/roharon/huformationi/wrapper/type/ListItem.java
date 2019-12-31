@@ -6,11 +6,11 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
-public class Thumbnail {
+public class ListItem {
+
+    private String title;
+    private String description;
     private String imageUrl;
     private Link link;
-    private Boolean fixedRaio;
-    private Integer width;
-    private Integer height;
 
 }

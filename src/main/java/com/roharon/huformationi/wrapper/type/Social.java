@@ -3,8 +3,6 @@ package com.roharon.huformationi.wrapper.type;
 import lombok.*;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @Builder
 @ToString
 public class Social {
