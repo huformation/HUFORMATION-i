@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class SimpleTextTest {
+public class ComponentTest {
 
     @Test
     void SimpleTextTest() {
@@ -44,7 +44,7 @@ public class SimpleTextTest {
         System.out.println(srJson);
 
         String ExpectJson = "{\"version\":\"2.0\",\"template\":{\"outputs\":[{\"simpleText\":{\"text\":\"11\"}}," +
-                "{\"simpleText\":{\"text\":\"11\"}},{\"simpleText\":{\"text\":\"11\"}}],\"quickReplies\":[]}}\n";
+                "{\"simpleText\":{\"text\":\"11\"}},{\"simpleText\":{\"text\":\"11\"}}],\"quickReplies\":[]}}";
 
         assertEquals(ExpectJson, srJson);
     }
