@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Builder
 public class Users {
 
     @Id
