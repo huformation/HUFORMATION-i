@@ -9,6 +9,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class blockButton implements Button {
+
     private String label;
     @Builder.Default
     private String action = "block";
