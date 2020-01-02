@@ -35,8 +35,8 @@ public class CafeteriaTest {
 
         for(Cafeteria cf: cfList){
 
-            cafeResult = cf.cafeteriaGet();
-            System.out.println(cafeResult);
+            cafeResult = cf.processMenu();
+            System.out.println(cf.toString());
         }
 
     }
