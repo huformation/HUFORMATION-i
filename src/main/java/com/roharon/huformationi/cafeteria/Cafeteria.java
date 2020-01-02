@@ -1,28 +1,51 @@
 package com.roharon.huformationi.cafeteria;
 
-import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class Cafeteria {
+public class Cafeteria implements CafeteriaData{
 
-    String day_d;
+    String whichCafe;
     String haksikUrl;
 
-
-    public Cafeteria(String date){
-        this.day_d = date;
+    public Cafeteria(String date, Cafe cafePlace){
         //date format - yyyyMMdd
 
-         this.haksikUrl = "https://wis.hufs.ac.kr/jsp/HUFS/cafeteria/viewWeek.jsp?startDt="
-                + day_d + "&endDt=" + day_d + "&caf_name=인문관식당&caf_id=h101";
+        if(cafePlace == Cafe.INMOON){
+            this.whichCafe = this.InmoonUrl;
+        }
+        else if(cafePlace == Cafe.GYOSOO){
+            this.whichCafe = this.GyosooUrl;
+        }
+        else if(cafePlace == Cafe.SKYLOUNGE){
+            this.whichCafe = this.SkyloungeUrl;
+        }
+        else if(cafePlace == Cafe.GOOKJE){
+            this.whichCafe = this.GookjeUrl;
+        }
+        else if(cafePlace == Cafe.HOOSENG_GYOJIK){
+            this.whichCafe = this.HoosengGyojikUrl;
+        }
+        else if(cafePlace == Cafe.HOOSENG_STUDENT){
+            this.whichCafe = this.HoosengStudentUrl;
+        }
+        else if(cafePlace == Cafe.UMOON){
+            this.whichCafe = this.UmoonUrl;
+        }
+        else if(cafePlace == Cafe.HUFSDORM){
+            this.whichCafe = this.HufsdormUrl;
+        }
+        else{
+            this.whichCafe = null;
+        }
+
+        this.haksikUrl = String.format(whichCafe, date, date);
+
     }
 
     public List<List<String>> cafeteriaGet(){
@@ -38,28 +61,49 @@ public class Cafeteria {
 
         Elements info = doc.getElementsByTag("td");
 
-        List<String> AllCafeteriaMenu = info.eachText();
+        if(info.text().contains("등록된 메뉴가 없습니다")) {
+            return null;
+        }
 
-        //final String[] matches = new String[] {"조식", "중식", "석식", "일품"};
+        List<String> AllCafeteriaMenu = info.eachText();
 
         List<String> oneMenu = new ArrayList<String>();
         List<List<String>> menuResult = new ArrayList<List<String>>();
 
         {
             for (String menu : AllCafeteriaMenu) {
+                try{
+                    if ((menu.length() < 20) && (menu.matches("조식(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("중식(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("석식(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("일품(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("메뉴(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("샐러드(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*")
+                            || menu.matches("뚝배기(\\(\\W\\W\\))?(\\(\\d\\))?(\\(\\w\\))? \\d{4}~\\w*\\s*"))) {
+                        // 안내문에 단순 조,중,석식 이름 들어갈 경우의 분류 방지
+                        try{
+                            oneMenu.remove(1);
+                            // 중복되는 일렬 데이터 삭제
+                        }
 
-                if (menu.contains("조식") || menu.contains("중식") || menu.contains("석식") || menu.contains("일품")) {
+                        catch (IndexOutOfBoundsException e){
+                            // remove 에러 예외처리
+                        }
 
-                    oneMenu.remove(1);
-                    // 중복되는 일렬 데이터 삭제
-
-                    menuResult.add(oneMenu);
-                    // 기존 추가된 단일메뉴를 menuResult에 추가
-                    oneMenu = new ArrayList<String>();
-                    //다시 단일 메뉴얻기위한 초기화
+                        menuResult.add(oneMenu);
+                        // 기존 추가된 단일메뉴를 menuResult에 추가
+                        oneMenu = new ArrayList<String>();
+                        //다시 단일 메뉴얻기위한 초기화
+                    }
                 }
 
-                oneMenu.add(menu);
+                catch (Exception e){
+                }
+
+                finally {
+                    oneMenu.add(menu);
+                }
+
             }
             oneMenu.remove(1);
             //마지막 remove(1)처리
