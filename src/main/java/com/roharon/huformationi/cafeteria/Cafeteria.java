@@ -12,6 +12,7 @@ public class Cafeteria implements CafeteriaData{
 
     String whichCafe;
     String haksikUrl;
+    List<List<String>> menus;
 
     public Cafeteria(String date, Cafe cafePlace){
         //date format - yyyyMMdd
@@ -48,7 +49,7 @@ public class Cafeteria implements CafeteriaData{
 
     }
 
-    public List<List<String>> cafeteriaGet(){
+    public List<List<String>> processMenu(){
 
         Document doc = null;
 
@@ -115,6 +116,31 @@ public class Cafeteria implements CafeteriaData{
             //요일/메뉴 내용 삭제
         }
 
+        this.menus = menuResult;
         return menuResult;
+    }
+
+    public String toString(){
+        String stringResult = "";
+
+        if(this.menus == null){
+            return "";
+        }
+
+        for (List<String> menu: this.menus) {
+            for (Integer ind = 0; ind < menu.size(); ind++){
+                stringResult += menu.get(ind) + "\n";
+
+                if (ind==0){
+                    stringResult += "\n";
+                }
+
+                else if (ind == menu.size()-2){
+                    stringResult += "\n";
+                }
+            }
+        }
+
+        return stringResult;
     }
 }
