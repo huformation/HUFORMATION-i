@@ -5,8 +5,10 @@ import com.roharon.huformationi.cafeteria.Cafeteria;
 import com.roharon.huformationi.cafeteria.CafeteriaData;
 import com.roharon.huformationi.wrapper.SkillResponse;
 import com.roharon.huformationi.wrapper.component.CarouselView;
+import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.BasicCard;
 import com.roharon.huformationi.wrapper.component.componentType.Carousel;
+import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.QuickReply;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import com.roharon.huformationi.wrapper.type.buttons.shareButton;
@@ -23,51 +25,32 @@ import java.util.Date;
 public class CafeteriaController {
 
     @ResponseBody
-    @PostMapping("/hello")
+    @PostMapping("/cafe")
     public SkillResponse cafe() {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         Date time = new Date();
 
         String nowDate = dateFormat.format(time);
-
         Cafeteria caf = new Cafeteria(nowDate, CafeteriaData.Cafe.GYOSOO);
         caf.processMenu();
 
+        String cafeResult = caf.toString();
+
+        if (cafeResult.length()==0){
+            cafeResult = replyData.emptyCafe;
+        }
+
         SkillResponse sr = SkillResponse.builder()
                 .template(SkillTemplate.builder()
-                        .addOutput(CarouselView.builder()
-                                .carousel(Carousel.builder()
-                                        .type("basicCard")
-                                        .addItem(BasicCard.builder()
-                                                .title("베이직 제목")
-                                                .description(caf.toString())
-                                                .addButton(shareButton.builder()
-                                                        .label("공유하기")
-                                                        .build())
-                                                .build())
-                                        .addItem(BasicCard.builder()
-                                                .title("베이직 제목")
-                                                .description(caf.toString())
-                                                .addButton(shareButton.builder()
-                                                        .label("공유하기")
-                                                        .build())
-                                                .build())
-                                        .addItem(BasicCard.builder()
-                                                .title("베이직 제목")
-                                                .description(caf.toString())
-                                                .addButton(shareButton.builder()
-                                                        .label("공유하기")
-                                                        .build())
-                                                .build())
-
+                        .addOutput(SimpleTextView.builder()
+                                .simpleText(SimpleText.builder()
+                                        .text(cafeResult)
                                         .build())
                                 .build())
-                        .addQuickReply(QuickReply.builder()
-                                .label("QR1")
-                                .messageText("QR1누름")
-                                .action("message")
-                                .build())
+                        .addQuickReply(replyData.cafe)
+                        .addQuickReply(replyData.library)
+                        .addQuickReply(replyData.option)
                         .build())
                 .build();
 
