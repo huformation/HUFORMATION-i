@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.roharon.huformationi.cafeteria.Cafeteria;
 import com.roharon.huformationi.cafeteria.CafeteriaData;
 import com.roharon.huformationi.webservice.users.UsersRepository;
+import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
 import com.roharon.huformationi.wrapper.component.BasicCardView;
 import com.roharon.huformationi.wrapper.component.CarouselView;
@@ -80,7 +81,11 @@ public class WebRestController {
     }
 
     @GetMapping("/")
-    public String root() {
-        return "root";
+    public String root(@RequestParam(value="date", required = true, defaultValue = "20191211") String date) {
+
+        Cafeteria caf = new Cafeteria(date, CafeteriaData.Cafe.GYOSOO);
+        caf.processMenu();
+
+        return caf.toString();
     }
 }
