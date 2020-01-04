@@ -3,6 +3,7 @@ package com.roharon.huformationi.wrapper.payload;
 import com.roharon.huformationi.wrapper.type.DetailParam;
 import lombok.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -13,6 +14,6 @@ public class Action{
     String id;
     String name;
     Map<String, String> params;
-    Map<String, DetailParam> detailParams;
-    Map<String, Object> clientExtra;
+    Map<String, List<DetailParam>> detailParams;
+    Map<String, List<Object>> clientExtra;
 }

@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+import java.util.Map;
+
 @Getter
 @Builder
 @ToString
@@ -13,6 +16,7 @@ public class UserRequest{
 
     public Block block;
     public User user;
+    public Map<String, String> params;
 
     private String timezone;
     private String utterance;
