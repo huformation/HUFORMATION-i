@@ -138,6 +138,9 @@ public class Cafeteria implements CafeteriaData{
                 else if (ind == menu.size()-2){
                     stringResult += "\n";
                 }
+                else if (ind == menu.size() -1 ){
+                    stringResult += "\n\n";
+                }
             }
         }
 
