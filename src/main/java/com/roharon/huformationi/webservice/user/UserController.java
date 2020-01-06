@@ -13,7 +13,7 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/campus")
-    public SkillResponse ShowCampusList(){
+    public SkillResponse ShowCampusList() {
 
         return userData.campusChange;
     }

@@ -10,6 +10,7 @@ import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class OptionController {
     @Autowired
     UserRepository userRepository;
 
+    @Transactional
     @PostMapping("/option")
     public SkillResponse option(@RequestBody SkillPayload spl){
 
@@ -30,34 +32,13 @@ public class OptionController {
         }
         else if(spl.userRequest.getUtterance().contains("서울캠퍼스")){
 
-            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
-            System.out.println(usr);
-            if(usr.size() == 0){
-                userRepository.save(User.builder()
-                        .userkey(spl.userRequest.user.getId())
-                        .campus("seoul")
-                        .build());
-            }
-            else{
-                usr.get(0).setCampus("seoul");
-            }
+            this.changeCampus(spl.userRequest.user.getId(), "seoul");
 
             return replyData.homeResponse;
         }
         else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
 
-            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
-            System.out.println(usr);
-
-            if(usr.size() == 0){
-                userRepository.save(User.builder()
-                        .userkey(spl.userRequest.user.getId())
-                        .campus("global")
-                        .build());
-            }
-            else{
-                usr.get(0).setCampus("global");
-            }
+            this.changeCampus(spl.userRequest.user.getId(), "global");
 
             return replyData.homeResponse;
         }
@@ -75,5 +56,21 @@ public class OptionController {
 
         return sr;
 
+    }
+
+    public void changeCampus(String key, String selectCampus){
+        List<User> usr = userRepository.findByUserkey(key);
+
+        if(usr.size() == 0){
+            userRepository.save(User.builder()
+                    .userkey(key)
+                    .campus(selectCampus)
+                    .build());
+        }
+        else{
+            usr.get(0).setCampus(selectCampus);
+            System.out.println(usr.get(0).getCampus());
+
+        }
     }
 }

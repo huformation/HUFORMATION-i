@@ -12,5 +12,4 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long>{
 
     public List<User> findByUserkey(String user_key);
-    public List<User> setFixedUserkeyFor(String userkey, String campus);
 }

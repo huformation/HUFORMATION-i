@@ -88,21 +88,20 @@ public interface replyData {
 
     QuickReply seoulCampus = QuickReply.builder()
             .label("서울캠퍼스")
-            .messageText("서울캠퍼스")
-            .action("message")
+            .action("block")
+            .blockId("5e12ccdfffa74800014bdeb5")
             .build();
 
     QuickReply globalCampus = QuickReply.builder()
             .label("글로벌캠퍼스")
-            .messageText("글로벌캠퍼스")
-            .action("message")
+            .action("block")
+            .blockId("5e12ccdfffa74800014bdeb5")
             .build();
 
     QuickReply changeCampus = QuickReply.builder()
             .label("캠퍼스 변경")
             .action("block")
             .blockId("5e12ccdfffa74800014bdeb5")
-            .messageText("캠퍼스 변경하기")
             .build();
 
     SkillResponse homeResponse = SkillResponse.builder()

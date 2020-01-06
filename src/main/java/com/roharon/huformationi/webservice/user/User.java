@@ -1,6 +1,7 @@
 package com.roharon.huformationi.webservice.user;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
+@DynamicUpdate
 @Builder
 public class User {
 
