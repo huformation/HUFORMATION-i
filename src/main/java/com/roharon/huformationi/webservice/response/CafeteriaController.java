@@ -49,20 +49,37 @@ public class CafeteriaController {
 
         else if (spl.userRequest.getUtterance().contains("서울캠퍼스")){
 
-            userRepository.save(User.builder()
-                    .userkey(spl.userRequest.user.getId())
-                    .campus("seoul")
-                    .build());
+            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
+            System.out.println(usr);
+            if(usr.size() == 0){
+                userRepository.save(User.builder()
+                        .userkey(spl.userRequest.user.getId())
+                        .campus("seoul")
+                        .build());
+            }
+            else{
+                usr.get(0).setCampus("seoul");
+                //TODO update로 바꾸기
+            }
 
             return replyData.homeResponse;
         }
 
         else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
 
-            userRepository.save(User.builder()
-                    .userkey(spl.userRequest.user.getId())
-                    .campus("global")
-                    .build());
+            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
+            System.out.println(usr);
+
+            if(usr.size() == 0){
+                userRepository.save(User.builder()
+                        .userkey(spl.userRequest.user.getId())
+                        .campus("global")
+                        .build());
+            }
+            else{
+                usr.get(0).setCampus("global");
+                //TODO update로 바꾸기
+            }
 
             return replyData.homeResponse;
         }
