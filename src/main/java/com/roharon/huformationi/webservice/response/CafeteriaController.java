@@ -1,24 +1,15 @@
 package com.roharon.huformationi.webservice.response;
 
-import com.google.gson.Gson;
 import com.roharon.huformationi.cafeteria.Cafeteria;
 import com.roharon.huformationi.cafeteria.CafeteriaData;
-import com.roharon.huformationi.webservice.HomeMenuController;
-import com.roharon.huformationi.webservice.users.Users;
-import com.roharon.huformationi.webservice.users.UsersController;
-import com.roharon.huformationi.webservice.users.UsersRepository;
-import com.roharon.huformationi.webservice.users.userData;
+import com.roharon.huformationi.webservice.user.User;
+import com.roharon.huformationi.webservice.user.UserRepository;
+import com.roharon.huformationi.webservice.user.userData;
 import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
-import com.roharon.huformationi.wrapper.component.CarouselView;
 import com.roharon.huformationi.wrapper.component.SimpleTextView;
-import com.roharon.huformationi.wrapper.component.componentType.BasicCard;
-import com.roharon.huformationi.wrapper.component.componentType.Carousel;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
-import com.roharon.huformationi.wrapper.type.QuickReply;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
-import com.roharon.huformationi.wrapper.type.User;
-import com.roharon.huformationi.wrapper.type.buttons.shareButton;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +22,15 @@ import java.util.List;
 @AllArgsConstructor
 public class CafeteriaController {
 
-    UsersRepository usersRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @ResponseBody
     @PostMapping("/cafe")
     public SkillResponse cafe(@RequestBody SkillPayload spl) {
-        System.out.println(spl.userRequest.block.getName() + spl.userRequest.block.getId());
-        // For test
+
         if (spl.userRequest.getUtterance().contains("학식메뉴")) {
-            List<Users> usr = usersRepository.findByUserkey(spl.userRequest.user.getId());
+            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
 
             if(usr.size()==0){
                 return userData.campusChange;
@@ -49,17 +40,29 @@ public class CafeteriaController {
             }
             else if(usr.get(0).getCampus() == "global"){
                 return this.ShowGlobalCafeteriaList();
-
+            }
+            else{
+                return replyData.homeResponse;
             }
 
         }
 
-        else if (spl.userRequest.getUtterance() == "서울캠퍼스"){
+        else if (spl.userRequest.getUtterance().contains("서울캠퍼스")){
+
+            userRepository.save(User.builder()
+                    .userkey(spl.userRequest.user.getId())
+                    .campus("seoul")
+                    .build());
 
             return replyData.homeResponse;
         }
-        else if(spl.userRequest.getUtterance() == "글로벌캠퍼스"){
-            usersRepository.save(new Users(spl.userRequest.user.getId(), "global"));
+
+        else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
+
+            userRepository.save(User.builder()
+                    .userkey(spl.userRequest.user.getId())
+                    .campus("global")
+                    .build());
 
             return replyData.homeResponse;
         }

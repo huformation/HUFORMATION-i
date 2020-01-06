@@ -98,6 +98,13 @@ public interface replyData {
             .action("message")
             .build();
 
+    QuickReply changeCampus = QuickReply.builder()
+            .label("캠퍼스 변경")
+            .action("block")
+            .blockId("5e12ccdfffa74800014bdeb5")
+            .messageText("캠퍼스 변경하기")
+            .build();
+
     SkillResponse homeResponse = SkillResponse.builder()
             .template(SkillTemplate.builder()
                     .addOutput(SimpleTextView.builder()
