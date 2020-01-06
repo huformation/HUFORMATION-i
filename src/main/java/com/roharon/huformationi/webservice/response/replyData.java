@@ -1,6 +1,8 @@
 package com.roharon.huformationi.webservice.response;
 
 import com.roharon.huformationi.wrapper.SkillResponse;
+import com.roharon.huformationi.wrapper.component.SimpleTextView;
+import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.QuickReply;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import com.sun.xml.bind.v2.model.annotation.Quick;
@@ -32,8 +34,8 @@ public interface replyData {
 
     QuickReply option = QuickReply.builder()
             .label("⚙️환경설정")
-            .messageText("학식메뉴")
-            .action("message")
+            .action("block")
+            .blockId("5e12ccdfffa74800014bdeb5")
             .build();
 
     QuickReply inmoon = QuickReply.builder()
@@ -83,4 +85,32 @@ public interface replyData {
             .messageText(hufsdorm_text)
             .action("message")
             .build();
+
+    QuickReply seoulCampus = QuickReply.builder()
+            .label("서울캠퍼스")
+            .messageText("서울캠퍼스")
+            .action("message")
+            .build();
+
+    QuickReply globalCampus = QuickReply.builder()
+            .label("글로벌캠퍼스")
+            .messageText("글로벌캠퍼스")
+            .action("message")
+            .build();
+
+    SkillResponse homeResponse = SkillResponse.builder()
+            .template(SkillTemplate.builder()
+                    .addOutput(SimpleTextView.builder()
+                            .simpleText(SimpleText.builder()
+                                    .text("아래 버튼을 눌러주세요")
+                                    .build()
+                            )
+                            .build())
+                    .addQuickReply(replyData.cafe)
+                    .addQuickReply(replyData.library)
+                    .addQuickReply(replyData.option)
+                    .build())
+            .build();
+
+
 }
