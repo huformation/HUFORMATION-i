@@ -1,4 +1,4 @@
-package com.roharon.huformationi.webservice.users;
+package com.roharon.huformationi.webservice.user;
 
 import com.roharon.huformationi.webservice.response.replyData;
 import com.roharon.huformationi.wrapper.SkillResponse;
