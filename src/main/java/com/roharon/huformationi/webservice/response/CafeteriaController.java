@@ -26,7 +26,7 @@ public class CafeteriaController {
     @ResponseBody
     @PostMapping("/cafe")
     public SkillResponse cafe(@RequestBody SkillPayload spl) {
-
+        System.out.println(spl.userRequest.block.getName() + spl.userRequest.block.getId());
         // For test
         if (spl.userRequest.getUtterance().contains("학식메뉴 보기")) {
             System.out.println(spl.userRequest.getUtterance());
@@ -38,7 +38,40 @@ public class CafeteriaController {
         Date time = new Date();
 
         String nowDate = dateFormat.format(time);
-        Cafeteria caf = new Cafeteria(nowDate, CafeteriaData.Cafe.GYOSOO);
+
+        Cafeteria caf;
+        CafeteriaData.Cafe cafeSelect;
+
+        switch(spl.userRequest.getUtterance()){
+            case replyData.gyosoo_text:
+                cafeSelect = Cafeteria.Cafe.GYOSOO;
+                break;
+            case replyData.inmoon_text:
+                cafeSelect = Cafeteria.Cafe.INMOON;
+                break;
+            case replyData.skylounge_text:
+                cafeSelect = Cafeteria.Cafe.SKYLOUNGE;
+                break;
+            case replyData.gookje_text:
+                cafeSelect = Cafeteria.Cafe.GOOKJE;
+                break;
+            case replyData.hoosenggyojik_text:
+                cafeSelect = Cafeteria.Cafe.HOOSENG_GYOJIK;
+                break;
+            case replyData.hoosengstudent_text:
+                cafeSelect = Cafeteria.Cafe.HOOSENG_STUDENT;
+                break;
+            case replyData.umoon_text:
+                cafeSelect = Cafeteria.Cafe.UMOON;
+                break;
+            case replyData.hufsdorm_text:
+                cafeSelect = Cafeteria.Cafe.HUFSDORM;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + spl.userRequest.getUtterance());
+        }
+
+        caf = new Cafeteria(nowDate, cafeSelect);
         caf.processMenu();
 
         String cafeResult = caf.toString();
