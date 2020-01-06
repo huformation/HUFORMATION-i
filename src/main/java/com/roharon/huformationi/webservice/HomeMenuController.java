@@ -9,8 +9,10 @@ import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
 import com.roharon.huformationi.wrapper.component.BasicCardView;
 import com.roharon.huformationi.wrapper.component.CarouselView;
+import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.BasicCard;
 import com.roharon.huformationi.wrapper.component.componentType.Carousel;
+import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.QuickReply;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import com.roharon.huformationi.wrapper.type.buttons.shareButton;
@@ -32,6 +34,12 @@ public class HomeMenuController {
 
         SkillResponse sr = SkillResponse.builder()
                 .template(SkillTemplate.builder()
+                        .addOutput(SimpleTextView.builder()
+                                .simpleText(SimpleText.builder()
+                                        .text("안녕하세요")
+                                        .build()
+                                )
+                                .build())
                         .addQuickReply(replyData.cafe)
                         .addQuickReply(replyData.library)
                         .addQuickReply(replyData.option)
