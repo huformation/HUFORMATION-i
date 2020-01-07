@@ -1,6 +1,6 @@
 spring:
   banner:
     charset: UTF-8
-  h2:
-    console:
-      enabled: true
+server:
+  address: 0.0.0.0
+  port: 8080
