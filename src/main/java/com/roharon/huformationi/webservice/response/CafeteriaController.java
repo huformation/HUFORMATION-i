@@ -28,7 +28,7 @@ public class CafeteriaController {
     @ResponseBody
     @PostMapping("/cafe")
     public SkillResponse cafe(@RequestBody SkillPayload spl) {
-        System.out.println("==---==" + spl.userRequest.getUtterance());
+
         if (spl.userRequest.getUtterance().contains("학식메뉴")) {
             List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
 

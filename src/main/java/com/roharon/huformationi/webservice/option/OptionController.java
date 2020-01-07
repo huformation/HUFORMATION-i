@@ -69,8 +69,6 @@ public class OptionController {
         }
         else{
             usr.get(0).setCampus(selectCampus);
-            System.out.println(usr.get(0).getCampus());
-
         }
     }
 }
