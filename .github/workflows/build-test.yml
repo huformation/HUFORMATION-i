@@ -19,8 +19,8 @@ jobs:
         java-package: jre
         
     - run: 
-        add-apt-repository ppa:openjdk-r/ppa
-        apt install openjdk-11-jdk
+        sudo add-apt-repository ppa:openjdk-r/ppa
+        sudo apt install openjdk-11-jdk
             
         
     - name: Change wrapper permissions
