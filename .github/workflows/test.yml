@@ -1,0 +1,33 @@
+name: Java CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - run: mkdir -p path/to/artifact
+      
+      
+    - name: Set up JDK 11.0.x
+      uses: actions/setup-java@v1
+      with:
+        java-version: '11.0.x'
+        java-package: jre
+        
+    - name: Build with Gradle
+      run: ./gradlew build
+      
+              
+    - name: action-slack
+      uses: 8398a7/action-slack@v2.6.0
+      with:
+        status: ${{job.status}}
+        author_name: Aaron CI
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+
