@@ -15,8 +15,9 @@ jobs:
     - name: Set up JDK 11.0.x
       uses: actions/setup-java@v1
       with:
-        java-version: '11.0.x'
-        java-package: jre
+        java-version: '1.8'
+        java-package: jdk
+            
         
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
