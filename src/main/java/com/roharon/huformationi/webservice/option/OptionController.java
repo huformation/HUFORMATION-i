@@ -1,8 +1,8 @@
 package com.roharon.huformationi.webservice.option;
 
-import com.roharon.huformationi.webservice.response.replyData;
-import com.roharon.huformationi.webservice.user.User;
-import com.roharon.huformationi.webservice.user.UserRepository;
+import com.roharon.huformationi.webservice.cafeteria.replyData;
+import com.roharon.huformationi.domain.user.User;
+import com.roharon.huformationi.domain.user.UserRepository;
 import com.roharon.huformationi.webservice.user.userData;
 import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
@@ -59,11 +59,11 @@ public class OptionController {
     }
 
     public void changeCampus(String key, String selectCampus){
-        List<User> usr = userRepository.findByUserkey(key);
+        List<User> usr = userRepository.findByUserKey(key);
 
         if(usr.size() == 0){
             userRepository.save(User.builder()
-                    .userkey(key)
+                    .userKey(key)
                     .campus(selectCampus)
                     .build());
         }

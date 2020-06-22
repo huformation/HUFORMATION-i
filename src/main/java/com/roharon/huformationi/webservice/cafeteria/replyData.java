@@ -1,11 +1,10 @@
-package com.roharon.huformationi.webservice.response;
+package com.roharon.huformationi.webservice.cafeteria;
 
 import com.roharon.huformationi.wrapper.SkillResponse;
 import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.QuickReply;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
-import com.sun.xml.bind.v2.model.annotation.Quick;
 
 public interface replyData {
 

@@ -1,6 +1,6 @@
 package com.roharon.huformationi.webservice.user;
 
-import com.roharon.huformationi.webservice.response.replyData;
+import com.roharon.huformationi.webservice.cafeteria.replyData;
 import com.roharon.huformationi.wrapper.SkillResponse;
 import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;

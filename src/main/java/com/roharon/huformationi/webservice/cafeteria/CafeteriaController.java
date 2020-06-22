@@ -1,9 +1,9 @@
-package com.roharon.huformationi.webservice.response;
+package com.roharon.huformationi.webservice.cafeteria;
 
 import com.roharon.huformationi.cafeteria.Cafeteria;
 import com.roharon.huformationi.cafeteria.CafeteriaData;
-import com.roharon.huformationi.webservice.user.User;
-import com.roharon.huformationi.webservice.user.UserRepository;
+import com.roharon.huformationi.domain.user.User;
+import com.roharon.huformationi.domain.user.UserRepository;
 import com.roharon.huformationi.webservice.user.userData;
 import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
@@ -30,7 +30,7 @@ public class CafeteriaController {
     public SkillResponse cafe(@RequestBody SkillPayload spl) {
 
         if (spl.userRequest.getUtterance().contains("학식메뉴")) {
-            List<User> usr = userRepository.findByUserkey(spl.userRequest.user.getId());
+            List<User> usr = userRepository.findByUserKey(spl.userRequest.user.getId());
 
             if(usr.size()==0){
                 return userData.campusChange;
