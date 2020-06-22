@@ -11,7 +11,6 @@ import javax.persistence.Id;
 @Setter
 @Entity
 @Builder
-@NoArgsConstructor
 public class User {
 
     @Id

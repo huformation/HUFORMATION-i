@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  postgres:
+    restart: always
+    image: 'postgres:12.2'
+    environment:
+      POSTGRES_USER: huformation
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: huformation-test
+    ports:
+      - 25432:5432
+    volumes:
+      - /var/lib/postgresql/docker/database:/var/lib/postgresql/database
+    networks:
+      - huformation_local_network
+  app:
+    build: .
+    environment:
+      SPRING_PROFILES_ACTIVE: develop
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/huformation-test
+      SPRING_DATASOURCE_USERNAME: huformation
+      SPRING_DATASOURCE_PASSWORD: password
+      SERVER_PORT: 8055
+    ports:
+      - 8055:8055
+    networks:
+      - huformation_local_network
+    depends_on:
+      - postgres
+
+networks:
+  huformation_local_network:

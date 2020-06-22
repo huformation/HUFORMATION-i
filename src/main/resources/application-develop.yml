@@ -1,0 +1,20 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    username: huformation
+    password: password
+    url: jdbc:postgresql://localhost:25432/huformation-test
+
+    #Connection Pool
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+server:
+  port: 8055
