@@ -21,14 +21,14 @@ public interface replyData {
 
     QuickReply cafe = QuickReply.builder()
             .label("\uD83C\uDF72학식메뉴")
-            .messageText("학식메뉴 보기")
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply library = QuickReply.builder()
             .label("\uD83D\uDCD2도서관 좌석")
-            .messageText("도서관 좌석보기")
-            .action("message")
+            .action("block")
+            .blockId("5e12c4f98192ac0001792dfd")
             .build();
 
     QuickReply option = QuickReply.builder()
@@ -40,49 +40,57 @@ public interface replyData {
     QuickReply inmoon = QuickReply.builder()
             .label("인문관")
             .messageText(inmoon_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply gyosoo = QuickReply.builder()
             .label("교수회관")
             .messageText(gyosoo_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply skylounge = QuickReply.builder()
             .label("스카이라운지")
             .messageText(skylounge_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply gookje = QuickReply.builder()
             .label("국제사회교육원")
             .messageText(gookje_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply hoosenggyojik = QuickReply.builder()
             .label("후생관 교직원식당")
             .messageText(hoosenggyojik_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply hoosengstudent = QuickReply.builder()
             .label("후생관 학생식당")
             .messageText(hoosengstudent_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply umoon = QuickReply.builder()
             .label("어문관")
             .messageText(umoon_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply hufsdorm = QuickReply.builder()
             .label("기숙사식당")
             .messageText(hufsdorm_text)
-            .action("message")
+            .action("block")
+            .blockId("5e12c4c8ffa74800014bddbd")
             .build();
 
     QuickReply seoulCampus = QuickReply.builder()
