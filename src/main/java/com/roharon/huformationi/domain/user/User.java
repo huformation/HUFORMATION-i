@@ -2,24 +2,33 @@ package com.roharon.huformationi.domain.user;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "user_entity", uniqueConstraints = {@UniqueConstraint(
+        name = "USER_KEY_UNIQUE", columnNames = {"userKey"}
+)})
 public class User {
+
+    public enum Campus {seoul, global}
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @NotNull
     @Column(length=500)
     private String userKey;
 
     @Column(length=10)
-    private String campus;
+    @Enumerated(EnumType.STRING)
+    private Campus campus;
+
+
 }

@@ -11,34 +11,30 @@ import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
 public class CafeteriaController {
-
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @ResponseBody
     @PostMapping("/cafe")
     public SkillResponse cafe(@RequestBody SkillPayload spl) {
 
         if (spl.userRequest.getUtterance().contains("학식메뉴")) {
-            List<User> usr = userRepository.findByUserKey(spl.userRequest.user.getId());
+            User usr = userRepository.findByUserKey(spl.userRequest.user.getId());
 
-            if(usr.size()==0){
+            if(usr == null){
                 return userData.campusChange;
             }
-            else if(usr.get(0).getCampus() == "seoul"){
+            else if(usr.getCampus().equals(User.Campus.seoul)){
                 return this.ShowSeoulCafeteriaList();
             }
-            else if(usr.get(0).getCampus() == "global"){
+            else if(usr.getCampus().equals(User.Campus.global)){
                 return this.ShowGlobalCafeteriaList();
             }
             else{
@@ -93,7 +89,7 @@ public class CafeteriaController {
             cafeResult = replyData.emptyCafe;
         }
 
-        SkillResponse sr = SkillResponse.builder()
+        return SkillResponse.builder()
                 .template(SkillTemplate.builder()
                         .addOutput(SimpleTextView.builder()
                                 .simpleText(SimpleText.builder()
@@ -105,11 +101,9 @@ public class CafeteriaController {
                         .addQuickReply(replyData.option)
                         .build())
                 .build();
-
-        return sr;
     }
 
-    public SkillResponse ShowSeoulCafeteriaList() {
+    private SkillResponse ShowSeoulCafeteriaList() {
 
         return SkillResponse.builder()
                 .template(SkillTemplate.builder()
@@ -125,7 +119,7 @@ public class CafeteriaController {
                 .build();
     }
 
-    public SkillResponse ShowGlobalCafeteriaList() {
+    private SkillResponse ShowGlobalCafeteriaList() {
 
         return SkillResponse.builder()
                 .template(SkillTemplate.builder()
