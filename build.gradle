@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'org.postgresql:postgresql'
 
 
