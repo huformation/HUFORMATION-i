@@ -1,8 +1,8 @@
 package com.roharon.huformationi.webservice.option;
 
-import com.roharon.huformationi.webservice.response.replyData;
-import com.roharon.huformationi.webservice.user.User;
-import com.roharon.huformationi.webservice.user.UserRepository;
+import com.roharon.huformationi.webservice.cafeteria.replyData;
+import com.roharon.huformationi.domain.user.User;
+import com.roharon.huformationi.domain.user.UserRepository;
 import com.roharon.huformationi.webservice.user.userData;
 import com.roharon.huformationi.wrapper.SkillPayload;
 import com.roharon.huformationi.wrapper.SkillResponse;
@@ -15,13 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Null;
 import java.util.List;
 
 @RestController
 public class OptionController {
+    private UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    public OptionController(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     @PostMapping("/option")
@@ -32,18 +36,18 @@ public class OptionController {
         }
         else if(spl.userRequest.getUtterance().contains("서울캠퍼스")){
 
-            this.changeCampus(spl.userRequest.user.getId(), "seoul");
+            this.changeCampus(spl.userRequest.user.getId(), User.Campus.seoul);
 
             return replyData.homeResponse;
         }
         else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
 
-            this.changeCampus(spl.userRequest.user.getId(), "global");
+            this.changeCampus(spl.userRequest.user.getId(), User.Campus.global);
 
             return replyData.homeResponse;
         }
 
-        SkillResponse sr = SkillResponse.builder()
+        return SkillResponse.builder()
                 .template(SkillTemplate.builder()
                         .addOutput(SimpleTextView.builder()
                                 .simpleText(SimpleText.builder()
@@ -54,21 +58,19 @@ public class OptionController {
                         .build())
                 .build();
 
-        return sr;
-
     }
 
-    public void changeCampus(String key, String selectCampus){
-        List<User> usr = userRepository.findByUserkey(key);
+    private void changeCampus(String key, User.Campus campus){
+        User usr = userRepository.findByUserKey(key);
 
-        if(usr.size() == 0){
+        if(usr == null){
             userRepository.save(User.builder()
-                    .userkey(key)
-                    .campus(selectCampus)
+                    .userKey(key)
+                    .campus(campus)
                     .build());
         }
         else{
-            usr.get(0).setCampus(selectCampus);
+            usr.setCampus(campus);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.roharon.huformationi.webservice;
 
-import com.roharon.huformationi.webservice.response.replyData;
+import com.roharon.huformationi.webservice.cafeteria.replyData;
 import com.roharon.huformationi.wrapper.SkillResponse;
 
 import lombok.AllArgsConstructor;
