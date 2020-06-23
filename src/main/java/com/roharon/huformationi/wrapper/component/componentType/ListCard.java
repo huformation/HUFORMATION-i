@@ -13,6 +13,6 @@ import java.util.List;
 public class ListCard implements Component{
 
     private ListItem header;
-    private ListItem items;
+    private List<ListItem> items;
     private List<Button> buttons;
 }
