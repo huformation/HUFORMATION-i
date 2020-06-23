@@ -1,0 +1,30 @@
+name: Publish Docker Image
+on:
+  push:
+    tags:
+      - v1.*
+
+jobs:
+  publish_image:
+    name: Publish Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Publish Image
+        uses: matootie/github-docker@v3.0.0
+        with:
+          tag: latest
+          accessToken: ${{ github.token }}
+
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{job.status}}
+          fields: repo,message,commit,author
+          author_name: Aaron CD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
