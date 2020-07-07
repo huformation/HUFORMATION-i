@@ -4,7 +4,8 @@ services:
     restart: always
     image: 'postgres:12.2'
     environment:
-      POSTGRES_USER: huformation
+      TZ: "Asia/Seoul"
+      POSTGRES_USER: huformation-test
       POSTGRES_PASSWORD: password
       POSTGRES_DB: huformation-test
     ports:
@@ -16,9 +17,10 @@ services:
   app:
     build: .
     environment:
+      TZ: "Asia/Seoul"
       SPRING_PROFILES_ACTIVE: develop
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/huformation-test
-      SPRING_DATASOURCE_USERNAME: huformation
+      SPRING_DATASOURCE_USERNAME: huformation-test
       SPRING_DATASOURCE_PASSWORD: password
       SERVER_PORT: 8055
     ports:

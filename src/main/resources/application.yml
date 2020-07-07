@@ -2,7 +2,7 @@ spring:
   datasource:
     username: ${USER_NAME}
     password: ${PASSWORD}
-    url: jdbc:postgresql://localhost:${POSTGRES_IN_PORT}/huformation
+    url: jdbc:postgresql://localhost:${POSTGRES_OUT_PORT}/huformation
   jpa:
     hibernate:
       ddl-auto: update
