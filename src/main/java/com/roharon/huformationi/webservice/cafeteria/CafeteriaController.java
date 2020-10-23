@@ -11,9 +11,11 @@ import com.roharon.huformationi.wrapper.component.SimpleTextView;
 import com.roharon.huformationi.wrapper.component.componentType.SimpleText;
 import com.roharon.huformationi.wrapper.type.SkillTemplate;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,37 +25,57 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class CafeteriaController {
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  enum DT {
+    TODAY, TOMORROW
+  }
   private UserRepository userRepository;
-  Logger logger;
 
-  /**
-   * Get specific cafeteria menu from hufs web
-   *
-   * @param spl
-   * SkillPayload (refer kakao i docs)
-   *
-   * @return SkillResponse
-   */
   @ResponseBody
-  @PostMapping("/cafe")
-  public SkillResponse cafe(@RequestBody SkillPayload spl) {
-
-    if (spl.userRequest.getUtterance().contains("학식메뉴")) {
+  @PostMapping("/today_cafe")
+  public SkillResponse cafeToday(@RequestBody SkillPayload spl) {
+    logger.info(spl.toString());
+    if (spl.userRequest.getUtterance().contains("학식")) {
       User usr = userRepository.findByUserKey(spl.userRequest.user.getId());
 
       if (usr == null) {
         return userData.campusChange;
       } else if (usr.getCampus().equals(User.Campus.seoul)) {
-        return this.showSeoulCafeteriaList();
+        return this.showTodaySeoulCafeteriaList();
       } else if (usr.getCampus().equals(User.Campus.global)) {
-        return this.showGlobalCafeteriaList();
+        return this.showTodayGlobalCafeteriaList();
       } else {
         return replyData.homeResponse;
       }
-
     }
 
-    String nowDate = getDate();
+    return cafeProceed(spl, DT.TODAY);
+  }
+
+  @ResponseBody
+  @PostMapping("/tomorrow_cafe")
+  public SkillResponse cafeTomorrow(@RequestBody SkillPayload spl) {
+    logger.info(spl.toString());
+
+    if (spl.userRequest.getUtterance().contains("학식")) {
+      User usr = userRepository.findByUserKey(spl.userRequest.user.getId());
+
+      if (usr == null) {
+        return userData.campusChange;
+      } else if (usr.getCampus().equals(User.Campus.seoul)) {
+        return this.showTomorrowSeoulCafeteriaList();
+      } else if (usr.getCampus().equals(User.Campus.global)) {
+        return this.showTomorrowGlobalCafeteriaList();
+      } else {
+        return replyData.homeResponse;
+      }
+    }
+
+    return cafeProceed(spl, DT.TOMORROW);
+  }
+
+  private SkillResponse cafeProceed(SkillPayload spl, DT DAY) {
+    String nowDate = getDayString(DAY);
 
     Cafeteria caf;
     CafeteriaData.Cafe cafeSelect = null;
@@ -84,7 +106,7 @@ public class CafeteriaController {
         cafeSelect = Cafeteria.Cafe.HUFSDORM;
         break;
       default:
-        logger.error("Unexpected Value: " + spl.userRequest.getUtterance());
+        logger.error(nowDate, spl.getUserRequest().toString());
     }
 
     caf = new Cafeteria(nowDate, cafeSelect);
@@ -103,50 +125,91 @@ public class CafeteriaController {
                     .text(cafeResult)
                     .build())
                 .build())
-            .addQuickReply(replyData.cafe)
+            .addQuickReply(replyData.todayCafe)
+            .addQuickReply(replyData.tomorrowCafe)
             .addQuickReply(replyData.library)
             .addQuickReply(replyData.option)
             .build())
         .build();
   }
 
-  private String getDate() {
+  private String getDayString(DT d) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-    Date time = new Date();
+    Date dt = new Date();
+    Calendar calendar = Calendar.getInstance();
 
-    return dateFormat.format(time);
+    calendar.setTime(dt);
+    if (d == DT.TOMORROW) {
+      calendar.add(Calendar.DATE, 1);
+    }
+
+    return dateFormat.format(calendar.getTime());
   }
 
-  private SkillResponse showSeoulCafeteriaList() {
+  private SkillResponse showTodaySeoulCafeteriaList() {
 
     return SkillResponse.builder()
         .template(SkillTemplate.builder()
             .addOutput(SimpleTextView.builder()
                 .simpleText(SimpleText.builder()
-                    .text("식당을 선택해주세요")
+                    .text(replyData.tdy_text)
                     .build())
                 .build())
-            .addQuickReply(replyData.inmoon)
-            .addQuickReply(replyData.gyosoo)
-            .addQuickReply(replyData.skylounge)
+            .addQuickReply(replyData.tdyInmoon)
+            .addQuickReply(replyData.tdyGyosoo)
+            .addQuickReply(replyData.tdySkylounge)
             .build())
         .build();
   }
 
-  private SkillResponse showGlobalCafeteriaList() {
+  private SkillResponse showTomorrowSeoulCafeteriaList() {
 
     return SkillResponse.builder()
         .template(SkillTemplate.builder()
             .addOutput(SimpleTextView.builder()
                 .simpleText(SimpleText.builder()
-                    .text("식당을 선택해주세요")
+                    .text(replyData.tmw_text)
                     .build())
                 .build())
-            .addQuickReply(replyData.hoosengstudent)
-            .addQuickReply(replyData.hoosenggyojik)
-            .addQuickReply(replyData.hufsdorm)
-            .addQuickReply(replyData.umoon)
-            .addQuickReply(replyData.gookje)
+            .addQuickReply(replyData.tmwInmoon)
+            .addQuickReply(replyData.tmwGyosoo)
+            .addQuickReply(replyData.tmwSkylounge)
+            .build())
+        .build();
+  }
+
+  private SkillResponse showTodayGlobalCafeteriaList() {
+
+    return SkillResponse.builder()
+        .template(SkillTemplate.builder()
+            .addOutput(SimpleTextView.builder()
+                .simpleText(SimpleText.builder()
+                    .text(replyData.tdy_text)
+                    .build())
+                .build())
+            .addQuickReply(replyData.tdyHoosengstudent)
+            .addQuickReply(replyData.tdyHoosenggyojik)
+            .addQuickReply(replyData.tdyHufsdorm)
+            .addQuickReply(replyData.tdyUmoon)
+            .addQuickReply(replyData.tdyGookje)
+            .build())
+        .build();
+  }
+
+  private SkillResponse showTomorrowGlobalCafeteriaList() {
+
+    return SkillResponse.builder()
+        .template(SkillTemplate.builder()
+            .addOutput(SimpleTextView.builder()
+                .simpleText(SimpleText.builder()
+                    .text(replyData.tmw_text)
+                    .build())
+                .build())
+            .addQuickReply(replyData.tmwHoosengstudent)
+            .addQuickReply(replyData.tmwHoosenggyojik)
+            .addQuickReply(replyData.tmwHufsdorm)
+            .addQuickReply(replyData.tmwUmoon)
+            .addQuickReply(replyData.tmwGookje)
             .build())
         .build();
   }
