@@ -20,57 +20,57 @@ import java.util.List;
 
 @RestController
 public class OptionController {
-    private UserRepository userRepository;
+  private UserRepository userRepository;
 
-    @Autowired
-    public OptionController(UserRepository userRepository){
-        this.userRepository = userRepository;
+  @Autowired
+  public OptionController(UserRepository userRepository){
+    this.userRepository = userRepository;
+  }
+
+  @Transactional
+  @PostMapping("/option")
+  public SkillResponse option(@RequestBody SkillPayload spl){
+
+    if(spl.userRequest.getUtterance().contains("캠퍼스 변경")){
+      return userData.campusChange;
+    }
+    else if(spl.userRequest.getUtterance().contains("서울캠퍼스")){
+
+      this.changeCampus(spl.userRequest.user.getId(), User.Campus.seoul);
+
+      return replyData.homeResponse;
+    }
+    else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
+
+      this.changeCampus(spl.userRequest.user.getId(), User.Campus.global);
+
+      return replyData.homeResponse;
     }
 
-    @Transactional
-    @PostMapping("/option")
-    public SkillResponse option(@RequestBody SkillPayload spl){
+    return SkillResponse.builder()
+        .template(SkillTemplate.builder()
+            .addOutput(SimpleTextView.builder()
+                .simpleText(SimpleText.builder()
+                    .text("환경설정 메뉴입니다")
+                    .build())
+                .build())
+            .addQuickReply(replyData.changeCampus)
+            .build())
+        .build();
 
-        if(spl.userRequest.getUtterance().contains("캠퍼스 변경")){
-            return userData.campusChange;
-        }
-        else if(spl.userRequest.getUtterance().contains("서울캠퍼스")){
+  }
 
-            this.changeCampus(spl.userRequest.user.getId(), User.Campus.seoul);
+  private void changeCampus(String key, User.Campus campus){
+    User usr = userRepository.findByUserKey(key);
 
-            return replyData.homeResponse;
-        }
-        else if(spl.userRequest.getUtterance().contains("글로벌캠퍼스")){
-
-            this.changeCampus(spl.userRequest.user.getId(), User.Campus.global);
-
-            return replyData.homeResponse;
-        }
-
-        return SkillResponse.builder()
-                .template(SkillTemplate.builder()
-                        .addOutput(SimpleTextView.builder()
-                                .simpleText(SimpleText.builder()
-                                        .text("환경설정 메뉴입니다")
-                                        .build())
-                                .build())
-                        .addQuickReply(replyData.changeCampus)
-                        .build())
-                .build();
-
+    if(usr == null){
+      userRepository.save(User.builder()
+          .userKey(key)
+          .campus(campus)
+          .build());
     }
-
-    private void changeCampus(String key, User.Campus campus){
-        User usr = userRepository.findByUserKey(key);
-
-        if(usr == null){
-            userRepository.save(User.builder()
-                    .userKey(key)
-                    .campus(campus)
-                    .build());
-        }
-        else{
-            usr.setCampus(campus);
-        }
+    else{
+      usr.setCampus(campus);
     }
+  }
 }

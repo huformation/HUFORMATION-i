@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    username: huformation
+    username: huformation-test
     password: password
     url: jdbc:postgresql://localhost:25432/huformation-test
 
@@ -18,3 +18,7 @@ spring:
     show-sql: true
 server:
   port: 8055
+
+logging:
+  level:
+    root: info

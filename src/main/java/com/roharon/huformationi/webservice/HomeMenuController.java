@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class HomeMenuController {
 
-    @ResponseBody
-    @PostMapping("/home")
-    public SkillResponse home() {
+  @ResponseBody
+  @PostMapping("/home")
+  public SkillResponse home() {
 
-        return replyData.homeResponse;
-    }
+    return replyData.homeResponse;
+  }
 }
