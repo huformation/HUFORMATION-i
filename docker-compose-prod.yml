@@ -1,0 +1,75 @@
+version: '3.4'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - 80:${SERVER_PORT}
+      - 443:${SERVER_PORT}
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - letsencrypt-certs:/etc/nginx/certs
+      - letsencrypt-vhost-d:/etc/nginx/vhost.d
+      - letsencrypt-html:/usr/share/nginx/html
+    depends_on:
+      - app
+    networks:
+      - huformation_local_network
+
+  letsencrypt-proxy:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-proxy
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt-certs:/etc/nginx/certs
+      - letsencrypt-vhost-d:/etc/nginx/vhost.d
+      - letsencrypt-html:/usr/share/nginx/html
+    environment:
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL}
+      NGINX_PROXY_CONTAINER: nginx-proxy
+    depends_on:
+      - nginx-proxy
+    networks:
+      - huformation_local_network
+
+  postgres:
+    restart: always
+    image: 'postgres:12.2'
+    environment:
+      TZ: "Asia/Seoul"
+      POSTGRES_USER: ${USER_NAME}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_NAME}
+    ports:
+      - ${POSTGRES_OUT_PORT}:5432
+    volumes:
+      - /var/lib/postgresql/docker/database:/var/lib/postgresql/database
+    networks:
+      - huformation_local_network
+
+  app:
+    restart: always
+    image: 'docker.pkg.github.com/roharon/huformation-i/huformation-i:latest'
+    environment:
+      TZ: "Asia/Seoul"
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres/${POSTGRES_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${USER_NAME}
+      SPRING_DATASOURCE_PASSWORD: ${PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - postgres
+    networks:
+      - huformation_local_network
+
+networks:
+  huformation_local_network:
+
+volumes:
+  letsencrypt-certs:
+  letsencrypt-vhost-d:
+  letsencrypt-html:
