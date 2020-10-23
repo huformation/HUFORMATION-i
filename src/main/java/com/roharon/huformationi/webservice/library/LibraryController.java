@@ -23,56 +23,57 @@ import java.util.Map;
 
 @RestController
 public class LibraryController {
-    private UserRepository userRepository;
+  private UserRepository userRepository;
 
-    @Autowired
-    public LibraryController(UserRepository userRepository){
-        this.userRepository = userRepository;
+  @Autowired
+  public LibraryController(UserRepository userRepository){
+    this.userRepository = userRepository;
+  }
+
+  @PostMapping("/library")
+  public SkillResponse library(@RequestBody SkillPayload spl){
+
+    String userKey = spl.userRequest.user.getId();
+    User usr = userRepository.findByUserKey(userKey);
+
+    if(usr == null){
+      return userData.campusChange;
     }
 
-    @PostMapping("/library")
-    public SkillResponse library(@RequestBody SkillPayload spl){
+    Campus userCampus = usr.getCampus();
+    Library library = new Library(userCampus);
+    List<Map<String, Object>> seatData = library.process();
 
-        String userKey = spl.userRequest.user.getId();
-        User usr = userRepository.findByUserKey(userKey);
+    List<ListItem> seatListData = new ArrayList<>();
 
-        if(usr == null){
-            return userData.campusChange;
-        }
+    for(Map<String, Object> data : seatData){
+      int available = (int)((double) data.get("available"));
+      int total = (int)((double) data.get("total"));
 
-        Campus userCampus = usr.getCampus();
-        Library library = new Library(userCampus);
-        List<Map<String, Object>> seatData = library.process();
+      String description = String
+          .format("이용 가능 : %d / 전체 좌석 : %d", available, total);
 
-        List<ListItem> seatListData = new ArrayList<>();
+      seatListData.add(ListItem.builder()
+          .title((String) data.get("name"))
+          .description(description)
+          .build());
+    }
 
-        for(Map<String, Object> data : seatData){
-            int available = (int)((double) data.get("available"));
-            int total = (int)((double) data.get("total"));
-
-            String description = String
-                    .format("이용 가능 : %d / 전체 좌석 : %d", available, total);
-
-            seatListData.add(ListItem.builder()
-                    .title((String) data.get("name"))
-                    .description(description)
-                    .build());
-        }
-
-        return SkillResponse.builder()
-                .template(SkillTemplate.builder()
-                        .addOutput(ListCardView.builder()
-                                .listCard(ListCard.builder()
-                                        .header(ListItem.builder()
-                                            .title("도서관 자리 안내")
-                                            .build())
-                                    .items(seatListData)
-                                    .build())
-                                .build())
-                        .addQuickReply(replyData.cafe)
-                        .addQuickReply(replyData.library)
-                        .addQuickReply(replyData.option)
+    return SkillResponse.builder()
+        .template(SkillTemplate.builder()
+            .addOutput(ListCardView.builder()
+                .listCard(ListCard.builder()
+                    .header(ListItem.builder()
+                        .title("도서관 자리 안내")
                         .build())
-                .build();
-    }
+                    .items(seatListData)
+                    .build())
+                .build())
+            .addQuickReply(replyData.todayCafe)
+            .addQuickReply(replyData.tomorrowCafe)
+            .addQuickReply(replyData.library)
+            .addQuickReply(replyData.option)
+            .build())
+        .build();
+  }
 }
