@@ -69,7 +69,7 @@ public interface replyData {
       .blockId("5e12c4c8ffa74800014bddbd")
       .build();
 
-  QuickReply tmwGyosoo = inmoonBuilder
+  QuickReply tmwGyosoo = gyosooBuilder
       .blockId("5e2d824f8192ac0001950f8b")
       .build();
 
