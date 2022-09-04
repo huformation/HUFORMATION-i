@@ -19,7 +19,7 @@ public class User {
     public enum Campus {seoul, global}
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
